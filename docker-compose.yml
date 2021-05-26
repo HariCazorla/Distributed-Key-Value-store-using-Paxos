@@ -7,7 +7,7 @@ services:
     networks:
       - paxos_backend
     ports:
-      - 8001:80
+      - 8001:8000
 
   node2:
     build:
@@ -16,7 +16,7 @@ services:
     networks:
       - paxos_backend
     ports:
-      - 8002:80
+      - 8002:8000
 
   node3:
     build:
@@ -25,7 +25,7 @@ services:
     networks:
       - paxos_backend
     ports:
-      - 8003:80
+      - 8003:8000
 
 networks:
   paxos_backend:
