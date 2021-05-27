@@ -46,8 +46,8 @@ class ProxyHttpRequestHandler(http.server.BaseHTTPRequestHandler):
         hostname = self._getServer()
         url = 'http://{}{}'.format(hostname, self.path)
         logging.info("[%s] forwading url: %s", str(datetime.now()), url)
-        resp = requests.get(url, headers=self.headers,
-                            verify=False, data=req_body)
+        resp = requests.post(url, headers=self.headers,
+                             verify=False, data=req_body)
         self.send_response(resp.status_code)
         self.wfile.write(resp.content)
 
