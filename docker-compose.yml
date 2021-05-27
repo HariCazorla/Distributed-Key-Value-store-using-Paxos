@@ -6,8 +6,6 @@ services:
       dockerfile: Dockerfile
     networks:
       - paxos_backend
-    ports:
-      - 8001:8000
 
   node2:
     build:
@@ -15,8 +13,6 @@ services:
       dockerfile: Dockerfile
     networks:
       - paxos_backend
-    ports:
-      - 8002:8000
 
   node3:
     build:
@@ -24,8 +20,15 @@ services:
       dockerfile: Dockerfile
     networks:
       - paxos_backend
+
+  loadbalancer:
+    build:
+      context: ./rproxy/
+      dockerfile: Dockerfile
+    networks:
+      - paxos_backend
     ports:
-      - 8003:8000
+      - 8081:8081
 
 networks:
   paxos_backend:
