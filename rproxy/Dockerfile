@@ -6,8 +6,9 @@ RUN apk update && \
 RUN wget https://github.com/HariCazorla/key-store/archive/refs/heads/master.zip && unzip master.zip
 RUN cd key-store-master/nodes/ && \
     chmod a+x *
-EXPOSE 8082
+COPY Proxy.py /key-store-master/nodes/
+EXPOSE 8081
 WORKDIR /key-store-master/nodes/
 RUN ls
-CMD [ "python3", "Server.py" ]
+CMD [ "python3", "Proxy.py" ]
 

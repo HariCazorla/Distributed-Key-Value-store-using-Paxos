@@ -48,9 +48,9 @@ class PaxosHttpRequestHandler(http.server.BaseHTTPRequestHandler):
         Executes the HTTP POST requests
         """
         content_length = int(self.headers['Content-Length'])
-        post_data = self.rfile.read(content_length)
+        req_body = self.rfile.read(content_length)
         logging.debug("[%s]\nPath: %s\nHeaders:\n%s\n\nBody:\n%s\n",
-                      str(datetime.now()), str(self.path), str(self.headers), post_data.decode('utf-8'))
+                      str(datetime.now()), str(self.path), str(self.headers), req_body.decode('utf-8'))
         try:
             self._initialise()
             self.routeHandler.validate()
