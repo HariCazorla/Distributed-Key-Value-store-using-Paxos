@@ -8,6 +8,5 @@ RUN cd key-store-master/nodes/ && \
     chmod a+x *
 EXPOSE 8082
 WORKDIR /key-store-master/nodes/
-RUN ls
 CMD [ "python3", "Server.py" ]
 

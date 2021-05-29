@@ -1,8 +1,11 @@
 import http.server
+from socketserver import ThreadingMixIn
+import threading
 import logging
 from datetime import datetime
+from Exceptions import *
 from Constants import SERVER_PORT
-from Exceptions import InvalidPathException
+from Exceptions import *
 from Router import RouteHandler
 
 
@@ -31,11 +34,18 @@ class PaxosHttpRequestHandler(http.server.BaseHTTPRequestHandler):
 
         try:
             self._initialise()
-            self.routeHandler.validate()
-            self._set_response(200)
             logging.info("[%s] %s", str(datetime.now()),
                          str(self.routeHandler))
+            self.routeHandler.validate()
+            self.routeHandler.handle()
+            self._set_response(200)
+
         except InvalidPathException:
+            self._set_response(404)
+            logging.error("[%s] %s", str(datetime.now()),
+                          str(self.routeHandler))
+
+        except InvalidProposalNumberException:
             self._set_response(404)
             logging.error("[%s] %s", str(datetime.now()),
                           str(self.routeHandler))
@@ -54,18 +64,36 @@ class PaxosHttpRequestHandler(http.server.BaseHTTPRequestHandler):
         try:
             self._initialise()
             self.routeHandler.validate()
-            self._set_response(200)
             logging.info("[%s] %s", str(datetime.now()),
                          str(self.routeHandler))
+            self.routeHandler.setValue(req_body)
+            self._set_response(200)
+
         except InvalidPathException:
             self._set_response(404)
-            ("[%s] %s", str(datetime.now()), str(self.routeHandler))
+            logging.error("[%s] Invalid path exception while %s", str(datetime.now()),
+                          str(self.routeHandler))
 
-        self.wfile.write("POST request for {}".format(
-            self.path).encode('utf-8'))
+        except PrepareRequestMajorityException:
+            self._set_response(404)
+            logging.error("[%s] %s", str(datetime.now()),
+                          "Failed to set the value becuase majority not reached...")
+
+        except UnexpectedException:
+            self._set_response(404)
+            logging.error("[%s] %s", str(datetime.now()), str(
+                "Failed to set Value due to unexpected exception..."))
+
+        self.wfile.write("Successful!".encode('utf-8'))
 
 
-def run(server_class=http.server.HTTPServer, handler_class=PaxosHttpRequestHandler):
+class ThreadedHTTPServer(ThreadingMixIn, http.server.HTTPServer):
+    """
+    Handles each request in a seperate thread
+    """
+
+
+def run(server_class=ThreadedHTTPServer, handler_class=PaxosHttpRequestHandler):
     """
     Start a basic HTTP server instance that listens on port 8000
     """
