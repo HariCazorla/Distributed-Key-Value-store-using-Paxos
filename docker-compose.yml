@@ -6,6 +6,8 @@ services:
       dockerfile: Dockerfile
     networks:
       - paxos_backend
+    environment: 
+      - SERVER_ID=node1
 
   node2:
     build:
@@ -13,6 +15,8 @@ services:
       dockerfile: Dockerfile
     networks:
       - paxos_backend
+    environment: 
+      - SERVER_ID=node2
 
   node3:
     build:
@@ -20,7 +24,10 @@ services:
       dockerfile: Dockerfile
     networks:
       - paxos_backend
+    environment: 
+      - SERVER_ID=node3
 
+  # Only loadbalancer is visible to outside of the network
   loadbalancer:
     build:
       context: ./rproxy/
