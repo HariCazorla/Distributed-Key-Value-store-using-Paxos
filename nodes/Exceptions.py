@@ -26,6 +26,19 @@ class AcceptRequestMajorityException(Exception):
     """
 
 
+class KeyNotFoundException(Exception):
+    """
+    Exception thrown when Key is not present in the
+    In Memory Key store of a node.
+    """
+
+
+class InvalidKeyValuePairException(Exception):
+    """
+    Exception thrown when Key or value is empty.
+    """
+
+
 class UnexpectedException(Exception):
     """
     Exception due to unexpected reasons

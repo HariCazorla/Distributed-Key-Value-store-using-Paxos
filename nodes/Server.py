@@ -1,4 +1,5 @@
 import http.server
+from Store import KeyStore
 from socketserver import ThreadingMixIn
 import threading
 import logging
@@ -7,6 +8,8 @@ from Exceptions import *
 from Constants import SERVER_PORT
 from Exceptions import *
 from Router import RouteHandler
+
+ks = KeyStore()
 
 
 class PaxosHttpRequestHandler(http.server.BaseHTTPRequestHandler):
@@ -18,7 +21,7 @@ class PaxosHttpRequestHandler(http.server.BaseHTTPRequestHandler):
         """
         Creates an object of RouteHandler
         """
-        self.routeHandler = RouteHandler(self.path, self.command)
+        self.routeHandler = RouteHandler(self.path, self.command, ks)
 
     def _set_response(self, res):
         self.send_response(res)
@@ -37,7 +40,7 @@ class PaxosHttpRequestHandler(http.server.BaseHTTPRequestHandler):
             logging.info("[%s] %s", str(datetime.now()),
                          str(self.routeHandler))
             self.routeHandler.validate()
-            self.routeHandler.handle()
+            res = self.routeHandler.handle()
             self._set_response(200)
 
         except InvalidPathException:
@@ -50,8 +53,18 @@ class PaxosHttpRequestHandler(http.server.BaseHTTPRequestHandler):
             logging.error("[%s] %s", str(datetime.now()),
                           str(self.routeHandler))
 
-        self.wfile.write("GET request for {}".format(
-            self.path).encode('utf-8'))
+        except KeyNotFoundException:
+            self._set_response(404)
+            logging.error("[%s] %s", str(datetime.now()),
+                          "Failed to fetch Key...")
+
+        except UnexpectedException:
+            self._set_response(404)
+            logging.error("[%s] %s", str(datetime.now()), str(
+                "Failed due to an unexpected exception..."))
+
+        self.wfile.write("response: {}".format(
+            res).encode('utf-8'))
 
     def do_POST(self):
         """
@@ -79,10 +92,15 @@ class PaxosHttpRequestHandler(http.server.BaseHTTPRequestHandler):
             logging.error("[%s] %s", str(datetime.now()),
                           "Failed to set the value becuase majority not reached...")
 
+        except InvalidKeyValuePairException:
+            self._set_response(404)
+            logging.error("[%s] %s", str(datetime.now()),
+                          "Failed to update Key-store...")
+
         except UnexpectedException:
             self._set_response(404)
             logging.error("[%s] %s", str(datetime.now()), str(
-                "Failed to set Value due to unexpected exception..."))
+                "Failed to set Value due to an unexpected exception..."))
 
         self.wfile.write("Successful!".encode('utf-8'))
 
