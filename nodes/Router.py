@@ -10,6 +10,7 @@ from Learner import Learner
 PREPARE_REQUEST = "prepare"
 ACCEPT_REQUEST = "accept"
 LEARN_REQUEST = "learn"
+KEY_REQUEST = "key"
 
 
 class RouteHandler:
@@ -17,12 +18,13 @@ class RouteHandler:
     Class to perform routing functionalities
     """
 
-    def __init__(self, urlPath, reqType) -> None:
+    def __init__(self, urlPath, reqType, ks) -> None:
         self.urlPath = urlPath
         self.reqType = reqType
         self.proposer = Proposer()
         self.acceptor = Acceptor()
         self.learner = Learner()
+        self.keystore = ks
         pass
 
     def __repr__(self) -> str:
@@ -42,11 +44,15 @@ class RouteHandler:
         self.proposer.run(body)
 
     def handle(self):
+        response = "Welcome to the Distributed Key Value Store..."
         if PREPARE_REQUEST in self.urlPath:
             self.acceptor.prepareHandler(self.urlPath)
         elif ACCEPT_REQUEST in self.urlPath:
             self.acceptor.acceptHandler(self.urlPath)
         elif LEARN_REQUEST in self.urlPath:
-            self.learner.learnHandler(self.urlPath)
+            self.learner.learnHandler(self.urlPath, self.keystore)
+        elif KEY_REQUEST in self.urlPath:
+            response = self.learner.keyHandler(self.urlPath, self.keystore)
         else:
             logging.info("Other GET Request")
+        return response

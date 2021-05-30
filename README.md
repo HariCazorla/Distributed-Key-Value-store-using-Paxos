@@ -1,5 +1,5 @@
 # key-store
-A distributed key value store implementation using dockers.
+A distributed key value store implementation which uses Simple Paxos to reach consensus.
 
 Sample commands:
 
