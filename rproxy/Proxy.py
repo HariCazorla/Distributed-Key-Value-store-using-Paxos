@@ -33,6 +33,7 @@ class ProxyHttpRequestHandler(http.server.BaseHTTPRequestHandler):
         logging.info("[%s] forwading url: %s", str(datetime.now()), url)
         resp = requests.get(url, headers=self.headers, verify=False)
         self.send_response(resp.status_code)
+        self.send_header(resp.headers)
         self.wfile.write(resp.content)
 
     def do_POST(self):
@@ -49,6 +50,7 @@ class ProxyHttpRequestHandler(http.server.BaseHTTPRequestHandler):
         resp = requests.post(url, headers=self.headers,
                              verify=False, data=req_body)
         self.send_response(resp.status_code)
+        self.send_header(resp.headers)
         self.wfile.write(resp.content)
 
 
