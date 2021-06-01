@@ -9,6 +9,7 @@ The Key-Value store offers two basic operations get key-value pair and set key-v
   * Proposers that propose a value for consensus.
   * Acceptors that choose the consensus value.
   * Learners that learn the consensus value.
+  
   A single process may take on multiple roles.
   
  ## Failure Assumptions
