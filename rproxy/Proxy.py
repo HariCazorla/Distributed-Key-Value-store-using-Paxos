@@ -32,8 +32,8 @@ class ProxyHttpRequestHandler(http.server.BaseHTTPRequestHandler):
         url = 'http://{}{}'.format(hostname, self.path)
         logging.info("[%s] forwading url: %s", str(datetime.now()), url)
         resp = requests.get(url, headers=self.headers, verify=False)
-        self.send_response(resp.status_code)
-        self.send_header(resp.headers)
+        self.send_response(200)
+        self.send_header('Content-Type', 'Text/html')
         self.end_headers()
         self.wfile.write(resp.content)
 
@@ -50,8 +50,8 @@ class ProxyHttpRequestHandler(http.server.BaseHTTPRequestHandler):
         logging.info("[%s] forwading url: %s", str(datetime.now()), url)
         resp = requests.post(url, headers=self.headers,
                              verify=False, data=req_body)
-        self.send_response(resp.status_code)
-        self.send_header(resp.headers)
+        self.send_response(200)
+        self.send_header('Content-Type', 'Text/html')
         self.end_headers()
         self.wfile.write(resp.content)
 

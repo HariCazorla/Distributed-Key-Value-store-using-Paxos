@@ -30,6 +30,5 @@ class Learner:
             value = "-"
         except ValueError:
             value = "-"
-        res = {key, value}
         logging.info("[%s] value is %s", str(datetime.now()), value)
-        return str(res)
+        return str(value)

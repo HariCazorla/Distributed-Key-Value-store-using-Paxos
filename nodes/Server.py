@@ -63,7 +63,7 @@ class PaxosHttpRequestHandler(http.server.BaseHTTPRequestHandler):
             logging.error("[%s] %s", str(datetime.now()), str(
                 "Failed due to an unexpected exception..."))
 
-        self.wfile.write("response: {}".format(
+        self.wfile.write("{}".format(
             res).encode('utf-8'))
 
     def do_POST(self):
