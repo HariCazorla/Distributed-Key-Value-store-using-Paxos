@@ -27,11 +27,9 @@ The Key-Value store offers two basic operations get key-value pair and set key-v
   ## Tests
   After cloning the repository, perform the below steps to run a test set with three test cases.
   
-  *```pip3 install pytest```
-  
-  *```cd tests```
-  
-  *```pytest``` This will start the execution and all three test cases should pass.
+  * ```pip3 install pytest```
+  * ```cd tests```
+  * ```pytest``` This will start the execution and all three test cases should pass.
   
  ## References
  [Paxos Made Simple by Leslie Lamport] (https://lamport.azurewebsites.net/pubs/paxos-simple.pdf)
