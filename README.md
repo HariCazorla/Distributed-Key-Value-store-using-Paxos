@@ -33,5 +33,5 @@ The Key-Value store offers two basic operations get key-value pair and set key-v
   * ```pytest``` This will start the execution and all three test cases should pass.
   
  ## References
- [Paxos Made Simple by Leslie Lamport] (https://lamport.azurewebsites.net/pubs/paxos-simple.pdf)
+ Paxos Made Simple by Leslie Lamport (https://lamport.azurewebsites.net/pubs/paxos-simple.pdf)
  
